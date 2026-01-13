@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Impostazioni - Claude via OpenRouter</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #333;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    input[type="password"],
+    select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: inherit;
+      transition: border-color 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    select:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    .help-text {
+      margin-top: 6px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .help-text a {
+      color: #667eea;
+      text-decoration: none;
+    }
+
+    .help-text a:hover {
+      text-decoration: underline;
+    }
+
+    .btn {
+      background: #667eea;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn:hover {
+      background: #5568d3;
+    }
+
+    .btn-secondary {
+      background: #6c757d;
+      margin-left: 10px;
+    }
+
+    .btn-secondary:hover {
+      background: #5a6268;
+    }
+
+    .success-message {
+      background: #d4edda;
+      color: #155724;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      border: 1px solid #c3e6cb;
+      display: none;
+    }
+
+    .info-box {
+      background: #e7f3ff;
+      border-left: 4px solid #667eea;
+      padding: 16px;
+      margin-bottom: 25px;
+      border-radius: 4px;
+    }
+
+    .info-box h3 {
+      color: #667eea;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    .info-box p {
+      color: #333;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .model-info {
+      background: #f8f9fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .model-info h4 {
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .model-info ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .model-info li {
+      padding: 6px 0;
+      font-size: 13px;
+      color: #666;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .model-info li:last-child {
+      border-bottom: none;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>⚙️ Impostazioni</h1>
+    <p class="subtitle">Configura Claude via OpenRouter</p>
+
+    <div class="success-message" id="successMessage">
+      ✓ Impostazioni salvate con successo!
+    </div>
+
+    <div class="info-box">
+      <h3>🔑 API Key OpenRouter</h3>
+      <p>
+        Per utilizzare questa estensione, hai bisogno di una API key di OpenRouter.
+        Puoi ottenerla gratuitamente su <a href="https://openrouter.ai/keys" target="_blank">openrouter.ai/keys</a>
+      </p>
+    </div>
+
+    <form id="settingsForm">
+      <div class="form-group">
+        <label for="apiKey">API Key OpenRouter *</label>
+        <input
+          type="password"
+          id="apiKey"
+          placeholder="sk-or-v1-..."
+          required
+        >
+        <div class="help-text">
+          La tua API key verrà salvata in modo sicuro nel browser
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="defaultModel">Modello Predefinito</label>
+        <select id="defaultModel">
+          <option value="anthropic/claude-3.5-haiku">Claude 3.5 Haiku (Veloce ed economico)</option>
+          <option value="anthropic/claude-3.5-sonnet">Claude 3.5 Sonnet (Bilanciato)</option>
+          <option value="anthropic/claude-3-opus">Claude 3 Opus (Massima qualità)</option>
+          <option value="anthropic/claude-3-sonnet">Claude 3 Sonnet</option>
+          <option value="anthropic/claude-3-haiku">Claude 3 Haiku</option>
+        </select>
+        <div class="help-text">
+          Puoi cambiare il modello in qualsiasi momento dal popup
+        </div>
+      </div>
+
+      <div class="model-info">
+        <h4>📊 Modelli Disponibili:</h4>
+        <ul>
+          <li><strong>Haiku 3.5:</strong> Veloce, economico, ottimo per task semplici</li>
+          <li><strong>Sonnet 3.5:</strong> Bilanciato tra velocità e qualità</li>
+          <li><strong>Opus 3:</strong> Massima intelligenza e qualità</li>
+        </ul>
+      </div>
+
+      <div class="actions">
+        <button type="submit" class="btn">Salva Impostazioni</button>
+        <button type="button" class="btn btn-secondary" id="clearHistory">Cancella Cronologia Chat</button>
+      </div>
+    </form>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>
