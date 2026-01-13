@@ -2,14 +2,19 @@
 let conversationHistory = [];
 let isLoading = false;
 let includeContext = false;
+let computerUseMode = false;
+let computerUseController = null;
 
 // Elementi DOM
 const chatContainer = document.getElementById('chatContainer');
 const messageInput = document.getElementById('messageInput');
 const sendBtn = document.getElementById('sendBtn');
+const stopBtn = document.getElementById('stopBtn');
 const modelSelector = document.getElementById('modelSelector');
 const settingsBtn = document.getElementById('settingsBtn');
 const contextBtn = document.getElementById('contextBtn');
+const computerUseToggle = document.getElementById('computerUseToggle');
+const modeIndicator = document.getElementById('modeIndicator');
 
 // Inizializzazione
 document.addEventListener('DOMContentLoaded', async () => {
@@ -17,8 +22,15 @@ document.addEventListener('DOMContentLoaded', async () => {
   await loadConversation();
   checkApiKey();
 
+  // Inizializza controller computer use
+  if (window.ComputerUseController) {
+    computerUseController = new ComputerUseController();
+  }
+
   // Event listeners
   sendBtn.addEventListener('click', sendMessage);
+  stopBtn.addEventListener('click', stopExecution);
+
   messageInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
@@ -35,21 +47,47 @@ document.addEventListener('DOMContentLoaded', async () => {
     contextBtn.classList.toggle('active', includeContext);
   });
 
+  computerUseToggle.addEventListener('change', (e) => {
+    computerUseMode = e.target.checked;
+    updateModeIndicator();
+
+    if (computerUseMode) {
+      showSystemMessage('🤖 Modalità Computer Use attivata! Claude può ora navigare e interagire con le pagine web.');
+    } else {
+      showSystemMessage('💬 Modalità Chat attivata');
+    }
+  });
+
   modelSelector.addEventListener('change', saveSettings);
 });
 
+// Aggiorna indicatore modalità
+function updateModeIndicator() {
+  if (computerUseMode) {
+    modeIndicator.textContent = 'Modalità: 🤖 Computer Use (Autonomous)';
+  } else {
+    modeIndicator.textContent = 'Modalità: 💬 Chat';
+  }
+}
+
 // Carica impostazioni
 async function loadSettings() {
-  const result = await chrome.storage.sync.get(['selectedModel']);
+  const result = await chrome.storage.sync.get(['selectedModel', 'computerUseMode']);
   if (result.selectedModel) {
     modelSelector.value = result.selectedModel;
+  }
+  if (result.computerUseMode !== undefined) {
+    computerUseMode = result.computerUseMode;
+    computerUseToggle.checked = computerUseMode;
+    updateModeIndicator();
   }
 }
 
 // Salva impostazioni
 async function saveSettings() {
   await chrome.storage.sync.set({
-    selectedModel: modelSelector.value
+    selectedModel: modelSelector.value,
+    computerUseMode: computerUseMode
   });
 }
 
@@ -96,6 +134,32 @@ function addMessageToUI(role, content) {
   messageDiv.className = `message ${role}`;
   messageDiv.textContent = content;
   chatContainer.appendChild(messageDiv);
+  scrollToBottom();
+}
+
+// Mostra messaggio di sistema
+function showSystemMessage(message) {
+  const messageDiv = document.createElement('div');
+  messageDiv.className = 'message system';
+  messageDiv.textContent = message;
+  chatContainer.appendChild(messageDiv);
+  scrollToBottom();
+}
+
+// Mostra log azione
+function showActionLog(action, details) {
+  const logDiv = document.createElement('div');
+  logDiv.className = 'action-log';
+  logDiv.innerHTML = `
+    <span class="action-type">${action}</span>
+    ${details ? `<div style="margin-top: 4px; font-size: 10px;">${details}</div>` : ''}
+  `;
+  chatContainer.appendChild(logDiv);
+  scrollToBottom();
+}
+
+// Scroll automatico
+function scrollToBottom() {
   chatContainer.scrollTop = chatContainer.scrollHeight;
 }
 
@@ -106,7 +170,7 @@ function showLoading() {
   loadingDiv.id = 'loading';
   loadingDiv.innerHTML = '<span></span><span></span><span></span>';
   chatContainer.appendChild(loadingDiv);
-  chatContainer.scrollTop = chatContainer.scrollHeight;
+  scrollToBottom();
 }
 
 // Rimuovi indicatore di caricamento
@@ -123,7 +187,7 @@ function showError(message) {
   errorDiv.className = 'message error';
   errorDiv.textContent = `❌ ${message}`;
   chatContainer.appendChild(errorDiv);
-  chatContainer.scrollTop = chatContainer.scrollHeight;
+  scrollToBottom();
 }
 
 // Ottieni il contesto della pagina corrente
@@ -138,7 +202,7 @@ async function getPageContext() {
   }
 }
 
-// Invia messaggio
+// Invia messaggio (chat normale o computer use)
 async function sendMessage() {
   const message = messageInput.value.trim();
   if (!message || isLoading) return;
@@ -150,7 +214,17 @@ async function sendMessage() {
     return;
   }
 
-  // Aggiungi messaggio utente
+  if (computerUseMode) {
+    // Modalità Computer Use
+    await sendComputerUseMessage(result.apiKey, message);
+  } else {
+    // Modalità Chat normale
+    await sendNormalChatMessage(result.apiKey, message);
+  }
+}
+
+// Chat normale (modalità base)
+async function sendNormalChatMessage(apiKey, message) {
   addMessageToUI('user', message);
   conversationHistory.push({ role: 'user', content: message });
 
@@ -163,7 +237,6 @@ async function sendMessage() {
     }
   }
 
-  // Pulisci input
   messageInput.value = '';
   isLoading = true;
   sendBtn.disabled = true;
@@ -174,7 +247,7 @@ async function sendMessage() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${result.apiKey}`,
+        'Authorization': `Bearer ${apiKey}`,
         'HTTP-Referer': chrome.runtime.getURL(''),
         'X-Title': 'Claude via OpenRouter Extension'
       },
@@ -197,22 +270,118 @@ async function sendMessage() {
     const data = await response.json();
     const assistantMessage = data.choices[0].message.content;
 
-    // Aggiungi risposta
     addMessageToUI('assistant', assistantMessage);
     conversationHistory.push({ role: 'assistant', content: assistantMessage });
 
-    // Salva conversazione
     await saveConversation();
 
   } catch (error) {
     removeLoading();
     console.error('Error:', error);
     showError(`Errore: ${error.message}`);
-    // Rimuovi l'ultimo messaggio utente dalla cronologia in caso di errore
     conversationHistory.pop();
   } finally {
     isLoading = false;
     sendBtn.disabled = false;
     messageInput.focus();
+  }
+}
+
+// Computer Use mode (autonomo)
+async function sendComputerUseMessage(apiKey, message) {
+  if (!computerUseController) {
+    showError('Computer Use Controller non disponibile');
+    return;
+  }
+
+  addMessageToUI('user', message);
+  messageInput.value = '';
+  isLoading = true;
+  sendBtn.disabled = true;
+  stopBtn.classList.add('visible');
+
+  showSystemMessage('🚀 Avvio modalità Computer Use...');
+
+  // Callback per aggiornamenti
+  const onUpdate = (update) => {
+    switch (update.type) {
+      case 'status':
+        showSystemMessage(update.message);
+        break;
+
+      case 'response':
+        // Mostra risposta di Claude
+        if (update.data.choices && update.data.choices[0]) {
+          const content = update.data.choices[0].message.content;
+          if (content && typeof content === 'string') {
+            addMessageToUI('assistant', content);
+          }
+        }
+        break;
+
+      case 'action':
+        // Mostra azioni eseguite
+        if (update.data.toolResults) {
+          update.data.toolResults.forEach(toolResult => {
+            const toolCall = toolResult.toolCall;
+            const input = toolCall.function?.input || {};
+
+            let actionDesc = `${toolCall.function.name}`;
+            if (input.action) {
+              actionDesc += ` → ${input.action}`;
+              if (input.coordinate) {
+                actionDesc += ` (${input.coordinate[0]}, ${input.coordinate[1]})`;
+              }
+              if (input.text) {
+                actionDesc += `: "${input.text.substring(0, 50)}"`;
+              }
+            }
+
+            showActionLog(actionDesc, JSON.stringify(toolResult.result).substring(0, 100));
+          });
+        }
+        break;
+
+      case 'complete':
+        showSystemMessage('✅ ' + update.message);
+        isLoading = false;
+        sendBtn.disabled = false;
+        stopBtn.classList.remove('visible');
+        break;
+
+      case 'error':
+        showError(update.message);
+        isLoading = false;
+        sendBtn.disabled = false;
+        stopBtn.classList.remove('visible');
+        break;
+    }
+  };
+
+  try {
+    // Avvia esecuzione autonoma
+    await computerUseController.runAutonomous(
+      apiKey,
+      modelSelector.value,
+      message,
+      onUpdate
+    );
+  } catch (error) {
+    console.error('Computer Use error:', error);
+    showError(`Errore: ${error.message}`);
+    isLoading = false;
+    sendBtn.disabled = false;
+    stopBtn.classList.remove('visible');
+  }
+}
+
+// Ferma l'esecuzione
+function stopExecution() {
+  if (computerUseController) {
+    computerUseController.stop();
+    showSystemMessage('🛑 Esecuzione fermata dall\'utente');
+    stopBtn.classList.remove('visible');
+    isLoading = false;
+    sendBtn.disabled = false;
   }
 }

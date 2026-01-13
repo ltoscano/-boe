@@ -1,15 +1,28 @@
-# Claude via OpenRouter - Chrome Extension
+# Claude via OpenRouter - Chrome Extension con Computer Use 🤖
 
-Un'estensione Chrome che ti permette di chattare con Claude (e altri modelli AI) usando OpenRouter. Questa estensione replica le funzionalità dell'estensione ufficiale Claude, ma offre la flessibilità di scegliere tra diversi modelli, incluso Claude Haiku 4.5.
+Un'estensione Chrome **avanzata** che porta Claude AI nel tuo browser con capacità di **Computer Use**. Naviga autonomamente siti web, interagisce con elementi della pagina, compila form e molto altro tramite OpenRouter API.
 
-## ✨ Caratteristiche
+## ✨ Caratteristiche Principali
 
-- 💬 **Chat interattiva** con Claude direttamente dal browser
-- 🔄 **Cambio rapido modello** - scegli tra Haiku, Sonnet, Opus e altri
-- 📄 **Context awareness** - includi il contenuto della pagina corrente nelle tue domande
-- 💾 **Cronologia conversazioni** - le tue chat vengono salvate automaticamente
-- 🎨 **Interfaccia moderna** - design pulito e intuitivo
-- 🔒 **Sicuro** - la tua API key è salvata localmente nel browser
+### 🤖 **Computer Use Mode (Autonomous)**
+- 📸 **Screenshot Analysis** - Claude "vede" la pagina web
+- 🖱️ **Mouse Control** - Muove il cursore e clicca su elementi
+- ⌨️ **Keyboard Input** - Digita testo e compila form
+- 🔄 **Autonomous Navigation** - Naviga siti web autonomamente
+- 👁️ **Visual Feedback** - Mostra cursore virtuale e azioni in tempo reale
+- 🛑 **Safety Controls** - Pulsante stop per fermare l'esecuzione
+
+### 💬 **Chat Mode (Standard)**
+- Conversazione testuale normale con Claude
+- Inclusione contesto pagina opzionale
+- Cronologia conversazioni persistente
+
+### 🎛️ **Altre Features**
+- **Selezione modello rapida** - Haiku 3.5, Sonnet 3.5, Opus 3, ecc.
+- **Toggle modalità** - Passa facilmente tra Chat e Computer Use
+- **Context awareness** - Include URL, titolo e contenuto pagina
+- **Action logging** - Visualizza tutte le azioni eseguite da Claude
+- **Interfaccia moderna** - UI pulita e intuitiva
 
 ## 🚀 Installazione
 
@@ -22,141 +35,257 @@ Un'estensione Chrome che ti permette di chattare con Claude (e altri modelli AI)
 
 ### 2. Installa l'estensione
 
-#### Opzione A: Da repository locale
-
 1. Scarica o clona questo repository
 2. Apri Chrome e vai su `chrome://extensions/`
 3. Abilita la "Modalità sviluppatore" (toggle in alto a destra)
 4. Clicca su "Carica estensione non pacchettizzata"
 5. Seleziona la cartella dell'estensione
 
-#### Opzione B: Da file .zip
-
-1. Scarica il file .zip dell'estensione
-2. Estrai il contenuto in una cartella
-3. Segui i passi dell'Opzione A dal punto 2
-
 ### 3. Configura l'estensione
 
 1. Clicca sull'icona dell'estensione nella toolbar
 2. Clicca su "Apri Impostazioni" o sull'icona ⚙️
 3. Incolla la tua API key di OpenRouter
-4. Scegli il modello predefinito (consigliato: Claude 3.5 Haiku)
+4. Scegli il modello predefinito (consigliato: **Claude 3.5 Haiku** o **Sonnet 3.5**)
 5. Clicca su "Salva Impostazioni"
 
 ## 📖 Come usare
 
-### Chat base
+### 🤖 Modalità Computer Use (Autonomous)
 
-1. Clicca sull'icona dell'estensione nella toolbar
-2. Scrivi il tuo messaggio nella casella di input
-3. Premi "Invia" o Invio
-4. Attendi la risposta di Claude
+**NOTA IMPORTANTE:** Haiku 4.5 e Sonnet 4.5 supportano computer use nativamente!
 
-### Includere il contesto della pagina
+1. Clicca sull'icona dell'estensione
+2. Attiva il toggle **"🤖 Computer Use"**
+3. Descrivi il task che vuoi automatizzare, ad esempio:
+   - "Cerca 'pizza napoletana' su Google e apri il primo risultato"
+   - "Compila il form di contatto con nome: Mario Rossi, email: mario@example.com"
+   - "Naviga su Amazon e cerca 'laptop'"
+   - "Leggi i primi 3 articoli di questa pagina e fai un riassunto"
 
-1. Apri l'estensione
-2. Clicca sull'icona 📄 nell'header
-3. L'icona diventerà evidenziata
-4. Ora i tuoi messaggi includeranno automaticamente:
+4. Claude inizierà a:
+   - 📸 Catturare screenshot della pagina
+   - 🧠 Analizzare cosa vede
+   - 🖱️ Muovere il mouse agli elementi
+   - 👆 Cliccare su pulsanti/link
+   - ⌨️ Digitare testo nei campi
+   - 🔄 Ripetere finché il task non è completo
+
+5. Vedrai in tempo reale:
+   - Messaggi di Claude
+   - Azioni eseguite (click, typing, scroll)
+   - Cursore virtuale viola che si muove
+
+6. Usa il pulsante **"Stop"** per interrompere in qualsiasi momento
+
+#### Esempi di Task Computer Use
+
+```
+✅ "Cerca 'weather Milan' su Google"
+✅ "Vai su Wikipedia e cerca 'Albert Einstein'"
+✅ "Compila il form newsletter con email test@example.com"
+✅ "Leggi il titolo e il primo paragrafo di questo articolo"
+✅ "Cerca 'best restaurants' e aprimi la mappa"
+```
+
+### 💬 Modalità Chat (Standard)
+
+1. Clicca sull'icona dell'estensione
+2. Assicurati che il toggle "Computer Use" sia **disattivato**
+3. Scrivi il tuo messaggio nella casella di input
+4. Premi "Invia" o Invio
+5. Attendi la risposta di Claude
+
+#### Includere il contesto della pagina
+
+1. Clicca sull'icona 📄 nell'header
+2. L'icona diventerà evidenziata
+3. Ora i tuoi messaggi includeranno automaticamente:
    - URL della pagina
    - Titolo della pagina
    - Contenuto testuale principale
 
-### Cambiare modello
+### 🎚️ Selezione Modello
 
 Usa il menu a tendina nell'header per scegliere tra:
 
-- **Claude 3.5 Haiku** - Veloce ed economico, ottimo per task quotidiani
-- **Claude 3.5 Sonnet** - Bilanciato tra velocità e qualità
-- **Claude 3 Opus** - Massima intelligenza per task complessi
-- **Claude 3 Sonnet** - Versione precedente di Sonnet
-- **Claude 3 Haiku** - Versione precedente di Haiku
+| Modello | Velocità | Qualità | Computer Use | Costo |
+|---------|----------|---------|--------------|-------|
+| **Haiku 3.5** | ⚡⚡⚡ | ⭐⭐⭐ | ✅ | 💰 |
+| **Sonnet 3.5** | ⚡⚡ | ⭐⭐⭐⭐ | ✅ | 💰💰 |
+| **Opus 3** | ⚡ | ⭐⭐⭐⭐⭐ | ❌ | 💰💰💰 |
 
-### Menu contestuale
+**Raccomandato per Computer Use:** Haiku 3.5 o Sonnet 3.5
 
-1. Seleziona del testo su qualsiasi pagina web
-2. Tasto destro → "Chiedi a Claude: [testo selezionato]"
-3. Apri l'estensione per vedere la risposta
+## 🔧 Funzionalità Computer Use
 
-## 🔧 Funzionalità avanzate
+### Azioni Supportate
 
-### Cancellare la cronologia
+Claude può eseguire queste azioni sulla pagina:
 
-1. Apri le Impostazioni (⚙️)
-2. Clicca su "Cancella Cronologia Chat"
-3. Conferma l'azione
+- **`screenshot`** - Cattura lo stato corrente della pagina
+- **`mouse_move`** - Muove il cursore a coordinate specifiche
+- **`left_click`** - Click sinistro sull'elemento
+- **`right_click`** - Click destro (menu contestuale)
+- **`double_click`** - Doppio click
+- **`type`** - Digita testo nell'elemento attivo
+- **`key`** - Preme tasti speciali (Enter, Tab, ecc.)
+- **`scroll`** - Scroll up/down nella pagina
 
-### Personalizzare le icone
+### Feedback Visivo
 
-Le icone predefinite sono placeholder. Per personalizzarle:
+L'estensione mostra:
 
-1. Crea tre immagini PNG:
-   - `icon16.png` (16x16 px)
-   - `icon48.png` (48x48 px)
-   - `icon128.png` (128x128 px)
-2. Sostituisci i file nella cartella `icons/`
-3. Ricarica l'estensione da `chrome://extensions/`
+- **Cursore virtuale viola** - Segue i movimenti del mouse di Claude
+- **Action logs** - Lista di tutte le azioni eseguite
+- **System messages** - Stato dell'esecuzione
+- **Animazioni click** - Feedback visivo sui click
 
-Puoi usare il file `icons/icon.svg` come base per creare le tue icone.
+### Safety Features
 
-## 💰 Costi
+- **Pulsante Stop** - Interrompi l'esecuzione in qualsiasi momento
+- **Limite iterazioni** - Massimo 50 iterazioni per task (sicurezza)
+- **No bash commands** - I comandi bash sono disabilitati per sicurezza
+- **User control** - L'utente ha sempre il controllo
 
-OpenRouter addebita in base all'uso. I costi variano per modello:
-
-- **Haiku 3.5**: ~$0.001 per 1K token (molto economico)
-- **Sonnet 3.5**: ~$0.003 per 1K token (medio)
-- **Opus 3**: ~$0.015 per 1K token (premium)
-
-Controlla i prezzi aggiornati su [openrouter.ai/models](https://openrouter.ai/models)
-
-OpenRouter offre crediti gratuiti per iniziare!
-
-## 🛠️ Sviluppo
+## 🏗️ Architettura Tecnica
 
 ### Struttura del progetto
 
 ```
 claude-openrouter-extension/
-├── manifest.json          # Configurazione estensione
+├── manifest.json          # Configurazione estensione (Manifest V3)
 ├── popup.html            # UI principale
-├── popup.js              # Logica chat e API
+├── popup.js              # Logica UI e gestione modalità
+├── computer-use.js       # Controller Computer Use
+├── content.js            # Executor azioni sulla pagina
 ├── options.html          # Pagina impostazioni
 ├── options.js            # Logica impostazioni
 ├── background.js         # Service worker
-├── content.js            # Script pagina
 ├── icons/                # Icone estensione
-└── README.md            # Questo file
+└── README.md            # Documentazione
 ```
 
-### Personalizzazione
+### Flow Computer Use
 
-Per modificare l'estensione:
+```
+1. User Input → popup.js
+2. Screenshot Capture → chrome.tabs.captureVisibleTab()
+3. API Request → OpenRouter con tool definitions
+4. Claude Response → Tool calls (mouse_move, click, type, ecc.)
+5. Action Execution → content.js executor
+6. New Screenshot → Feedback loop
+7. Repeat until task complete
+```
 
-1. Modifica i file necessari
-2. Vai su `chrome://extensions/`
-3. Clicca sull'icona di ricarica per l'estensione
-4. Testa le modifiche
+### API Integration
+
+L'estensione usa:
+
+- **OpenRouter API** - `/v1/chat/completions` endpoint
+- **Beta Header** - `anthropic-beta: computer-use-2025-01-24`
+- **Tools**:
+  - `computer_20250124` - Screenshot e azioni
+  - `text_editor_20250124` - Editing testo
+  - `bash_20250124` - Comandi bash (disabilitato)
+
+## 💰 Costi
+
+OpenRouter addebita in base all'uso. I costi per Computer Use:
+
+| Modello | Input (1M token) | Output (1M token) | Screenshot (~10KB) |
+|---------|------------------|-------------------|--------------------|
+| **Haiku 3.5** | $1 | $5 | ~$0.001 |
+| **Sonnet 3.5** | $3 | $15 | ~$0.003 |
+
+**Nota:** Computer Use richiede screenshot ripetuti, il costo può aumentare rapidamente. Usa Haiku 3.5 per task semplici.
+
+OpenRouter offre **$5 crediti gratuiti** per iniziare!
+
+## 🛠️ Sviluppo e Customizzazione
 
 ### Debug
 
-- Popup: Tasto destro sul popup → Ispeziona
-- Background: `chrome://extensions/` → Dettagli → Ispeziona visualizzazioni → service worker
-- Content script: Apri DevTools su qualsiasi pagina → Console
+- **Popup**: Tasto destro sul popup → Ispeziona
+- **Background**: `chrome://extensions/` → Dettagli → Ispeziona service worker
+- **Content script**: DevTools su qualsiasi pagina → Console (guarda log con `[Computer Use]`)
+
+### Modificare le Azioni
+
+Aggiungi nuove azioni in `content.js` → `executeComputerAction()`:
+
+```javascript
+case 'my_custom_action':
+  return await myCustomAction(action.params);
+```
+
+### Aggiungere Modelli
+
+Modifica `popup.html` → `#modelSelector`:
+
+```html
+<option value="anthropic/claude-haiku-4.5">Haiku 4.5</option>
+```
 
 ## ❓ FAQ
 
-**Q: Posso usare altri modelli oltre a Claude?**
-A: Sì! OpenRouter supporta molti modelli. Modifica il file `popup.html` per aggiungere altre opzioni al menu `modelSelector`.
+**Q: Quali modelli supportano Computer Use?**
+A: Claude 3.5 Haiku, Sonnet 3.5, Haiku 4.5, Sonnet 4.5, e Opus 4.1 supportano computer use.
 
-**Q: La mia API key è sicura?**
-A: Sì, viene salvata localmente nel browser usando Chrome Storage. Non viene mai inviata a server esterni (tranne OpenRouter per le API call).
+**Q: Funziona su tutti i siti web?**
+A: Sì, ma alcuni siti con protezioni anti-bot potrebbero bloccare le azioni automatiche.
 
-**Q: Posso usare questa estensione con l'API diretta di Anthropic?**
-A: No, questa estensione è progettata specificamente per OpenRouter. Per usare l'API diretta, dovresti modificare l'URL e l'autenticazione in `popup.js`.
+**Q: Quanto costa usare Computer Use?**
+A: Dipende dal modello e dal numero di screenshot. Haiku 3.5 è il più economico (~$0.001 per screenshot).
 
-**Q: Funziona offline?**
-A: No, richiede una connessione internet per comunicare con OpenRouter.
+**Q: È sicuro?**
+A: L'estensione ha limiti di sicurezza (max iterazioni, no bash), ma supervisiona sempre Claude per evitare azioni indesiderate.
+
+**Q: Posso usare l'API diretta di Anthropic invece di OpenRouter?**
+A: Sì, ma devi modificare l'URL e l'autenticazione in `computer-use.js` e `popup.js`.
+
+**Q: Claude può navigare su più tab?**
+A: No, lavora solo sulla tab attiva corrente.
+
+**Q: Posso salvare le sessioni Computer Use?**
+A: Al momento no, ma puoi estendere il codice per salvare l'`actionHistory`.
+
+## 🎯 Esempi d'Uso Avanzati
+
+### Ricerca e Raccolta Dati
+
+```
+"Cerca 'best pizza restaurants in Milan' su Google e fai uno screenshot dei primi 3 risultati"
+```
+
+### Compilazione Form
+
+```
+"Compila il form con:
+- Nome: Mario Rossi
+- Email: mario.rossi@example.com
+- Messaggio: Vorrei maggiori informazioni"
+```
+
+### Navigation
+
+```
+"Vai su news.ycombinator.com, apri il primo articolo, e dimmi di cosa parla"
+```
+
+### Comparazione
+
+```
+"Cerca 'laptop' su Amazon e eBay e confronta i primi risultati"
+```
+
+## ⚠️ Limitazioni
+
+- **No multi-tab** - Lavora solo su una tab alla volta
+- **No file upload** - Non può caricare file
+- **No download** - Non può scaricare file
+- **Rate limits** - OpenRouter ha rate limit API
+- **Siti protetti** - Alcuni siti bloccano automazione
 
 ## 🤝 Contributi
 
@@ -169,19 +298,22 @@ I contributi sono benvenuti! Sentiti libero di:
 
 ## 📄 Licenza
 
-MIT License - Usa liberamente questo codice per i tuoi progetti!
+MIT License - Usa liberamente questo codice!
 
 ## ⚠️ Disclaimer
 
-Questa è un'estensione non ufficiale. Non è affiliata con Anthropic o OpenRouter. Usa a tuo rischio.
+Questa è un'estensione **non ufficiale**. Non è affiliata con Anthropic o OpenRouter.
+
+**IMPORTANTE:** L'automazione di siti web può violare i Terms of Service di alcuni siti. Usa responsabilmente e solo su siti dove hai il permesso.
 
 ## 🔗 Link utili
 
 - [OpenRouter](https://openrouter.ai/)
 - [Documentazione API OpenRouter](https://openrouter.ai/docs)
+- [Computer Use Documentation](https://docs.anthropic.com/claude/docs/computer-use)
 - [Modelli disponibili](https://openrouter.ai/models)
 - [Estensione ufficiale Claude](https://chrome.google.com/webstore/detail/claude/fcoeoabgfenejglbffodgkkbkcdhcgfn)
 
 ---
 
-Fatto con ❤️ per la community
+**Fatto con ❤️ per la community** | v2.0.0 - Computer Use Edition

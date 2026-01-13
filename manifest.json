@@ -1,12 +1,13 @@
 {
   "manifest_version": 3,
-  "name": "Claude via OpenRouter",
-  "version": "1.0.0",
-  "description": "Chat con Claude Haiku 4.5 e altri modelli tramite OpenRouter",
+  "name": "Claude via OpenRouter - Computer Use",
+  "version": "2.0.0",
+  "description": "Claude AI con Computer Use: navigazione autonoma, screenshot analysis, automazione browser tramite OpenRouter",
   "permissions": [
     "storage",
     "activeTab",
-    "scripting"
+    "scripting",
+    "tabs"
   ],
   "host_permissions": [
     "https://openrouter.ai/*"
