@@ -5,6 +5,15 @@ let includeContext = false;
 let computerUseMode = false;
 let computerUseController = null;
 
+// Modelli compatibili con Computer Use
+const COMPUTER_USE_MODELS = [
+  'anthropic/claude-3.5-haiku',
+  'anthropic/claude-3.5-sonnet',
+  'anthropic/claude-haiku-4.5',
+  'anthropic/claude-sonnet-4.5',
+  'anthropic/claude-opus-4.1'
+];
+
 // Elementi DOM
 const chatContainer = document.getElementById('chatContainer');
 const messageInput = document.getElementById('messageInput');
@@ -48,7 +57,16 @@ document.addEventListener('DOMContentLoaded', async () => {
   });
 
   computerUseToggle.addEventListener('change', (e) => {
-    computerUseMode = e.target.checked;
+    const wantsComputerUse = e.target.checked;
+
+    // Valida che il modello supporti computer use
+    if (wantsComputerUse && !isComputerUseCompatible(modelSelector.value)) {
+      showError(`⚠️ Il modello "${modelSelector.options[modelSelector.selectedIndex].text}" non supporta Computer Use. Scegli Haiku 3.5, Sonnet 3.5, o modelli 4.5+`);
+      computerUseToggle.checked = false;
+      return;
+    }
+
+    computerUseMode = wantsComputerUse;
     updateModeIndicator();
 
     if (computerUseMode) {
@@ -58,8 +76,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
   });
 
-  modelSelector.addEventListener('change', saveSettings);
+  modelSelector.addEventListener('change', () => {
+    saveSettings();
+    // Se computer use è attivo e il nuovo modello non è compatibile, disattiva
+    if (computerUseMode && !isComputerUseCompatible(modelSelector.value)) {
+      computerUseToggle.checked = false;
+      computerUseMode = false;
+      updateModeIndicator();
+      showError(`⚠️ Modello cambiato a uno non compatibile con Computer Use. Modalità disattivata.`);
+    }
+  });
 });
+
+// Controlla se un modello è compatibile con computer use
+function isComputerUseCompatible(modelId) {
+  return COMPUTER_USE_MODELS.includes(modelId);
+}
 
 // Aggiorna indicatore modalità
 function updateModeIndicator() {
@@ -211,6 +243,12 @@ async function sendMessage() {
   const result = await chrome.storage.sync.get(['apiKey']);
   if (!result.apiKey) {
     showError('API key non configurata. Apri le impostazioni.');
+    return;
+  }
+
+  // Valida modello per computer use
+  if (computerUseMode && !isComputerUseCompatible(modelSelector.value)) {
+    showError('⚠️ Il modello selezionato non supporta Computer Use. Cambia modello o disattiva Computer Use.');
     return;
   }
 
