@@ -9,6 +9,13 @@ chrome.runtime.onInstalled.addListener((details) => {
   } else if (details.reason === 'update') {
     console.log('Estensione aggiornata!');
   }
+
+  // Context menu per interagire con Claude dalla selezione di testo
+  chrome.contextMenus.create({
+    id: 'askClaude',
+    title: 'Chiedi a Claude: "%s"',
+    contexts: ['selection']
+  });
 });
 
 // Gestione messaggi da content scripts o popup
@@ -19,15 +26,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
     return true; // Mantiene il canale aperto per sendResponse asincrona
   }
-});
-
-// Context menu per interagire con Claude dalla selezione di testo
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.contextMenus.create({
-    id: 'askClaude',
-    title: 'Chiedi a Claude: "%s"',
-    contexts: ['selection']
-  });
 });
 
 // Gestione click sul context menu
